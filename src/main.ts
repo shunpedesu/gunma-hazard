@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { BootScene } from "./scenes/BootScene";
 import { TitleScene } from "./scenes/TitleScene";
+import { StoryScene } from "./scenes/StoryScene";
 import { GameScene } from "./scenes/GameScene";
 import { GameOverScene } from "./scenes/GameOverScene";
 import { ClearScene } from "./scenes/ClearScene";
@@ -17,7 +18,7 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: false,
     },
   },
-  scene: [BootScene, TitleScene, GameScene, GameOverScene, ClearScene],
+  scene: [BootScene, TitleScene, StoryScene, GameScene, GameOverScene, ClearScene],
   parent: "app",
   scale: {
     mode: Phaser.Scale.FIT,

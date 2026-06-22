@@ -58,7 +58,7 @@ export class TitleScene extends Phaser.Scene {
       overlay.setDepth(100).setAlpha(0);
       this.tweens.add({
         targets: overlay, alpha: 1, duration: 500, ease: "Power1",
-        onComplete: () => { this.scene.stop(); this.scene.start("GameScene", { stage: 1 }); },
+        onComplete: () => { this.scene.stop(); this.scene.start("StoryScene"); },
       });
     };
 
