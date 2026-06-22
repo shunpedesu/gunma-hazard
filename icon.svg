@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- 背景 -->
+  <rect width="512" height="512" rx="80" fill="#0a0010"/>
+  <!-- 霧のような赤グロー -->
+  <circle cx="256" cy="260" r="160" fill="#550000" opacity="0.4"/>
+  <!-- おばけの体 -->
+  <ellipse cx="256" cy="230" rx="100" ry="110" fill="#ccbbdd"/>
+  <!-- おばけの裾（ギザギザ） -->
+  <path d="M156 310 Q176 350 196 310 Q216 370 236 310 Q256 370 276 310 Q296 370 316 310 Q336 350 356 310 L356 230 Q356 120 256 120 Q156 120 156 230 Z" fill="#ccbbdd"/>
+  <!-- 目（怖い赤目） -->
+  <ellipse cx="220" cy="215" rx="20" ry="24" fill="#ff0000"/>
+  <ellipse cx="292" cy="215" rx="20" ry="24" fill="#ff0000"/>
+  <ellipse cx="220" cy="218" rx="10" ry="14" fill="#000"/>
+  <ellipse cx="292" cy="218" rx="10" ry="14" fill="#000"/>
+  <!-- 口 -->
+  <path d="M228 258 Q256 278 284 258" stroke="#440000" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <!-- タイトル文字 -->
+  <text x="256" y="430" text-anchor="middle" font-family="serif" font-size="68" font-weight="bold" fill="#cc2200" letter-spacing="2">グンマ</text>
+  <text x="256" y="490" text-anchor="middle" font-family="serif" font-size="44" fill="#882200">HAZARD</text>
+</svg>

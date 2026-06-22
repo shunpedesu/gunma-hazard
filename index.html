@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="グンマハザード" />
+    <meta name="theme-color" content="#0a0010" />
+    <link rel="manifest" href="/gunma-hazard/manifest.json" />
+    <link rel="apple-touch-icon" href="/gunma-hazard/icon.svg" />
+    <title>グンマハザード</title>
+    <style>
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        width: 100%; height: 100%;
+        background: #000;
+        overflow: hidden;
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      #app {
+        width: 100%; height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+      }
+      #app canvas {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+      }
+      /* デスクトップでは上下中央 */
+      @media (pointer: fine) {
+        #app { align-items: center; }
+      }
+
+      /* ── タッチ操作オーバーレイ ─────────────────────── */
+      #touch-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 9999;
+      }
+      @media (pointer: coarse) {
+        #touch-overlay { display: block; }
+      }
+
+      /* ジョイスティック */
+      #joystick-zone {
+        position: absolute;
+        bottom: 28px;
+        left: 28px;
+        width: 130px;
+        height: 130px;
+        pointer-events: all;
+      }
+      #joystick-base {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.12);
+        border: 2px solid rgba(255,255,255,0.3);
+      }
+      #joystick-thumb {
+        position: absolute;
+        width: 52px; height: 52px;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: rgba(255,255,255,0.45);
+        border: 2px solid rgba(255,255,255,0.7);
+        transition: transform 0.05s;
+        pointer-events: none;
+      }
+
+      /* アクションボタン */
+      #btn-interact {
+        position: absolute;
+        bottom: 48px;
+        right: 36px;
+        width: 76px; height: 76px;
+        border-radius: 50%;
+        background: rgba(255, 200, 50, 0.35);
+        border: 2px solid rgba(255, 200, 50, 0.8);
+        color: #fff;
+        font-size: 13px;
+        font-family: sans-serif;
+        font-weight: bold;
+        text-align: center;
+        line-height: 1.2;
+        pointer-events: all;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+      #btn-interact:active {
+        background: rgba(255, 200, 50, 0.65);
+        transform: scale(0.93);
+      }
+
+      /* ダッシュボタン */
+      #btn-sprint {
+        position: absolute;
+        bottom: 140px;
+        right: 44px;
+        width: 58px; height: 58px;
+        border-radius: 50%;
+        background: rgba(100, 180, 255, 0.3);
+        border: 2px solid rgba(100, 180, 255, 0.7);
+        color: #fff;
+        font-size: 12px;
+        font-family: sans-serif;
+        font-weight: bold;
+        pointer-events: all;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+      #btn-sprint:active {
+        background: rgba(100, 180, 255, 0.6);
+      }
+    </style>
+    <script type="module" crossorigin src="/gunma-hazard/assets/index-Bg7i281H.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <!-- タッチ操作オーバーレイ -->
+    <div id="touch-overlay">
+      <div id="joystick-zone">
+        <div id="joystick-base">
+          <div id="joystick-thumb"></div>
+        </div>
+      </div>
+      <button id="btn-interact">調べる<br>／隠れる</button>
+      <button id="btn-sprint">DASH</button>
+    </div>
+
+    <script>
+      // ── タッチ操作の状態をグローバル公開 ──────────────
+      window.__TOUCH__ = { x: 0, y: 0, sprint: false, interact: false };
+
+      const zone  = document.getElementById('joystick-zone');
+      const thumb = document.getElementById('joystick-thumb');
+      const RADIUS = 39;
+      let joystickId = null;
+      let baseX = 0, baseY = 0;
+
+      function getCenter(el) {
+        const r = el.getBoundingClientRect();
+        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+      }
+
+      zone.addEventListener('touchstart', e => {
+        e.preventDefault();
+        const t = e.changedTouches[0];
+        joystickId = t.identifier;
+        const c = getCenter(zone);
+        baseX = c.x; baseY = c.y;
+        updateJoystick(t.clientX, t.clientY);
+      }, { passive: false });
+
+      zone.addEventListener('touchmove', e => {
+        e.preventDefault();
+        for (const t of e.changedTouches) {
+          if (t.identifier === joystickId) updateJoystick(t.clientX, t.clientY);
+        }
+      }, { passive: false });
+
+      zone.addEventListener('touchend', e => {
+        e.preventDefault();
+        for (const t of e.changedTouches) {
+          if (t.identifier === joystickId) {
+            joystickId = null;
+            thumb.style.transform = 'translate(-50%, -50%)';
+            window.__TOUCH__.x = 0;
+            window.__TOUCH__.y = 0;
+          }
+        }
+      }, { passive: false });
+
+      function updateJoystick(cx, cy) {
+        let dx = cx - baseX, dy = cy - baseY;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist > RADIUS) { dx = dx/dist*RADIUS; dy = dy/dist*RADIUS; }
+        thumb.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+        window.__TOUCH__.x = dx / RADIUS;
+        window.__TOUCH__.y = dy / RADIUS;
+      }
+
+      // 調べる／隠れるボタン
+      const btnInteract = document.getElementById('btn-interact');
+      btnInteract.addEventListener('touchstart', e => {
+        e.preventDefault();
+        window.__TOUCH__.interact = true;
+      }, { passive: false });
+      btnInteract.addEventListener('touchend', e => {
+        e.preventDefault();
+        window.__TOUCH__.interact = false;
+      }, { passive: false });
+
+      // ダッシュボタン
+      const btnSprint = document.getElementById('btn-sprint');
+      btnSprint.addEventListener('touchstart', e => {
+        e.preventDefault();
+        window.__TOUCH__.sprint = true;
+      }, { passive: false });
+      btnSprint.addEventListener('touchend', e => {
+        e.preventDefault();
+        window.__TOUCH__.sprint = false;
+      }, { passive: false });
+    </script>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>
