@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { STAGE_GAMEOVER_MESSAGES, STAGE_CONFIGS } from "../data/gunma-data";
+import { STAGE_GAMEOVER_MESSAGES, STAGE_CONFIGS, GUNMA_TRIVIA_GAMEOVER } from "../data/gunma-data";
 
 export class GameOverScene extends Phaser.Scene {
   constructor() { super({ key: "GameOverScene" }); }
@@ -37,7 +37,7 @@ export class GameOverScene extends Phaser.Scene {
 
     if (deathCount > 0) {
       const countColor = deathCount >= 5 ? "#ff4444" : deathCount >= 3 ? "#ffaa44" : "#aaaaaa";
-      this.add.text(width / 2, height / 2 + 16, `💀 通算死亡 ${deathCount} 回`, {
+      this.add.text(width / 2, height / 2 + 16, `💀 通算やられた回数 ${deathCount} 回`, {
         fontSize: "14px", color: countColor, stroke: "#000000", strokeThickness: 2,
       }).setOrigin(0.5);
     }
@@ -47,6 +47,16 @@ export class GameOverScene extends Phaser.Scene {
       fontSize: "13px", color: "#888888", stroke: "#000000", strokeThickness: 2,
     }).setOrigin(0.5);
 
+    // 今日の群馬知識
+    const triviaFact = Phaser.Utils.Array.GetRandom(GUNMA_TRIVIA_GAMEOVER) as string;
+    this.add.text(width / 2, height / 2 + 76, "📚 今日の群馬知識", {
+      fontSize: "12px", color: "#aaddaa", stroke: "#000000", strokeThickness: 2,
+    }).setOrigin(0.5);
+    this.add.text(width / 2, height / 2 + 94, triviaFact, {
+      fontSize: "12px", color: "#cceecc", stroke: "#000000", strokeThickness: 2,
+      wordWrap: { width: width - 60 }, align: "center",
+    }).setOrigin(0.5);
+
     const hints = [
       "💡 タンスに隠れれば鬼をやり過ごせる",
       "💡 Shiftキーでダッシュ！でもスタミナに注意",
@@ -54,7 +64,7 @@ export class GameOverScene extends Phaser.Scene {
       "💡 怪しいと思ったらすぐタンスへ",
       "💡 上毛かるたを覚えればクイズは楽勝",
     ];
-    this.add.text(width / 2, height / 2 + 58, Phaser.Utils.Array.GetRandom(hints) as string, {
+    this.add.text(width / 2, height / 2 + 118, Phaser.Utils.Array.GetRandom(hints) as string, {
       fontSize: "13px", color: "#888866", stroke: "#000000", strokeThickness: 2,
     }).setOrigin(0.5);
 
@@ -63,11 +73,11 @@ export class GameOverScene extends Phaser.Scene {
       .setDepth(100).setAlpha(1);
     this.tweens.add({ targets: overlay, alpha: 0, duration: 600, ease: "Power1" });
 
-    const retryBtn = this.add.text(width / 2 - 85, height / 2 + 90, "[ もう一度 ]", {
+    const retryBtn = this.add.text(width / 2 - 85, height / 2 + 148, "[ もう一度 ]", {
       fontSize: "22px", color: "#ffffff", stroke: "#000000", strokeThickness: 3,
     }).setOrigin(0.5).setInteractive({ useHandCursor: true });
 
-    const titleBtn = this.add.text(width / 2 + 85, height / 2 + 90, "[ タイトルへ ]", {
+    const titleBtn = this.add.text(width / 2 + 85, height / 2 + 148, "[ タイトルへ ]", {
       fontSize: "22px", color: "#aaaaaa", stroke: "#000000", strokeThickness: 3,
     }).setOrigin(0.5).setInteractive({ useHandCursor: true });
 

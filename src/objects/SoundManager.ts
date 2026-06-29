@@ -172,14 +172,13 @@ export class SoundManager {
     }
   }
 
-  /** 足音の間隔管理 */
-  scheduleFootstep(isMoving: boolean) {
-    if (!isMoving) return;
+  /** 足音の間隔管理（スプリント中は速くなる） */
+  scheduleFootstep(isSprinting = false) {
     if (this.footstepTimeout) return;
     this.footstep();
     this.footstepTimeout = setTimeout(() => {
       this.footstepTimeout = null;
-    }, 320);
+    }, isSprinting ? 190 : 320);
   }
 
   destroy() {

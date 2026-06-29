@@ -21,16 +21,47 @@ export class BootScene extends Phaser.Scene {
   }
 
   private createSprites() {
-    // ─── プレイヤー ───────────────────────────────────────
+    // ─── プレイヤー（サラリーマン タカシ）──────────────────
     if (!this.textures.exists("player")) {
       const g = this.add.graphics();
-      g.fillStyle(0xf0c080); g.fillRect(10, 0, 12, 12);   // 頭
-      g.fillStyle(0x4488ff); g.fillRect(8, 12, 16, 14);   // 体
-      g.fillStyle(0xf0c080);
-      g.fillRect(4, 13, 6, 10); g.fillRect(22, 13, 6, 10); // 腕
-      g.fillStyle(0x333366);
-      g.fillRect(9, 26, 7, 10); g.fillRect(16, 26, 7, 10); // 足
-      g.generateTexture("player", 32, 36); g.destroy();
+      const p = (color: number, x: number, y: number, w: number, h: number) => {
+        g.fillStyle(color); g.fillRect(x, y, w, h);
+      };
+      // 黒髪
+      p(0x111111, 10, 0, 12, 3);
+      p(0x111111, 8,  1, 16, 5);
+      p(0x111111, 8,  0,  3, 7);
+      p(0x111111, 21, 0,  3, 7);
+      // 顔（肌色）
+      p(0xF0C080, 9,  3, 14, 10);
+      // 目
+      p(0x3a2a10, 11, 6,  2,  2);
+      p(0x3a2a10, 19, 6,  2,  2);
+      // 口
+      p(0xCC7755, 13, 10,  6,  1);
+      // 白シャツ（襟元）
+      p(0xEEEEEE, 11, 13,  4,  3);
+      p(0xEEEEEE, 17, 13,  4,  3);
+      // ネクタイ（赤）
+      p(0xDD2222, 14, 13,  4,  10);
+      p(0xCC1111, 15, 23,  2,  3);
+      // 紺スーツ（上着）
+      p(0x1a3060, 8,  13, 16, 13);
+      p(0x1a3060, 8,  13,  4, 13); // 左ラペル
+      p(0x1a3060, 20, 13,  4, 13); // 右ラペル
+      // 腕（スーツ袖）
+      p(0x1a3060, 4,  14,  5, 10);
+      p(0x1a3060, 23, 14,  5, 10);
+      // 手（肌色）
+      p(0xF0C080, 4,  24,  4,  3);
+      p(0xF0C080, 24, 24,  4,  3);
+      // ズボン（紺）
+      p(0x15254d, 9,  26,  6, 10);
+      p(0x15254d, 17, 26,  6, 10);
+      // 靴（黒）
+      p(0x111111, 8,  34,  7,  3);
+      p(0x111111, 17, 34,  7,  3);
+      g.generateTexture("player", 32, 37); g.destroy();
     }
 
     // ─── 敵：こんにゃくおばけ（ステージ1）───────────────
@@ -239,6 +270,51 @@ export class BootScene extends Phaser.Scene {
       g.generateTexture("door", 32, 32); g.destroy();
     }
 
+    // ─── 緑の鍵（3色目） ─────────────────────────────────
+    if (!this.textures.exists("item_yakimanjuu_green")) {
+      const g = this.add.graphics();
+      g.fillStyle(0x228844); g.fillEllipse(12, 14, 22, 20);
+      g.fillStyle(0x115522); g.fillEllipse(10, 12, 14, 10); g.fillCircle(16, 9, 4);
+      g.fillStyle(0x336622); g.fillRect(20, 16, 12, 4);
+      g.fillRect(28, 12, 4, 4); g.fillRect(28, 20, 4, 4);
+      g.fillStyle(0x44cc66, 0.6); g.fillEllipse(9, 10, 8, 6);
+      g.generateTexture("item_yakimanjuu_green", 34, 28); g.destroy();
+    }
+    if (!this.textures.exists("item_magatama_green")) {
+      const g = this.add.graphics();
+      g.fillStyle(0x228833); g.fillCircle(14, 14, 12);
+      g.fillStyle(0x228833); g.fillTriangle(14, 26, 26, 14, 28, 28);
+      g.fillCircle(26, 22, 4);
+      g.fillStyle(0x55ee88, 0.6); g.fillCircle(10, 10, 5);
+      g.lineStyle(1, 0x114422, 1); g.strokeCircle(14, 14, 12);
+      g.generateTexture("item_magatama_green", 32, 32); g.destroy();
+    }
+    if (!this.textures.exists("item_silk_green")) {
+      const g = this.add.graphics();
+      g.fillStyle(0x33aa55); g.fillEllipse(16, 18, 28, 22);
+      g.lineStyle(1, 0x55cc77, 0.8);
+      for (let i = 0; i < 5; i++) {
+        g.beginPath(); g.moveTo(6 + i * 5, 8); g.lineTo(4 + i * 5, 28); g.strokePath();
+      }
+      g.fillStyle(0xaaffbb, 0.7); g.fillEllipse(10, 13, 8, 5);
+      g.generateTexture("item_silk_green", 32, 36); g.destroy();
+    }
+
+    // ─── ボス祠（封印の石碑） ─────────────────────────────
+    if (!this.textures.exists("boss_shrine")) {
+      const g = this.add.graphics();
+      g.fillStyle(0x442244); g.fillRect(4, 0, 32, 42);
+      g.fillStyle(0x552255); g.fillRect(6, 2, 28, 36);
+      g.lineStyle(2, 0xaa44aa, 0.9); g.strokeRect(6, 2, 28, 36);
+      // 紋様
+      g.fillStyle(0xff44ff, 0.7);
+      g.fillRect(18, 6, 4, 12); g.fillRect(12, 10, 16, 4);
+      g.fillRect(16, 22, 8, 8);
+      // 台座
+      g.fillStyle(0x331133); g.fillRect(0, 38, 40, 8);
+      g.generateTexture("boss_shrine", 40, 46); g.destroy();
+    }
+
     // ─── 鍵（汎用） ──────────────────────────────────────
     if (!this.textures.exists("item_key")) {
       const g = this.add.graphics();
@@ -249,6 +325,40 @@ export class BootScene extends Phaser.Scene {
       g.fillRect(15, 8, 14, 4);
       g.fillRect(23, 12, 4, 4); g.fillRect(19, 12, 4, 4);
       g.generateTexture("item_key", 32, 24); g.destroy();
+    }
+
+    // ─── 暗号メモ ─────────────────────────────────────────
+    if (!this.textures.exists("item_cipher")) {
+      const g = this.add.graphics();
+      g.fillStyle(0xfffde7); g.fillRect(0, 2, 26, 32);
+      g.lineStyle(1, 0xccaa66); g.strokeRect(0, 2, 26, 32);
+      g.fillStyle(0xff3311); g.fillRect(0, 2, 26, 7); // 赤いヘッダー
+      g.fillStyle(0xffffff); g.fillRect(2, 4, 22, 3);
+      g.lineStyle(1, 0xaabb88);
+      for (let i = 0; i < 4; i++) {
+        g.beginPath(); g.moveTo(3, 13 + i * 6); g.lineTo(23, 13 + i * 6); g.strokePath();
+      }
+      g.fillStyle(0x334411); // 文字っぽい点
+      g.fillRect(3, 12, 8, 2); g.fillRect(3, 18, 12, 2);
+      g.fillRect(3, 24, 6, 2);
+      g.generateTexture("item_cipher", 26, 34); g.destroy();
+    }
+
+    // ─── 金庫 ─────────────────────────────────────────────
+    if (!this.textures.exists("safe")) {
+      const g = this.add.graphics();
+      g.fillStyle(0x445566); g.fillRect(0, 0, 38, 38);
+      g.fillStyle(0x334455); g.fillRect(2, 2, 34, 34);
+      g.lineStyle(2, 0x667788); g.strokeRect(2, 2, 34, 34);
+      // ダイヤル
+      g.fillStyle(0x778899); g.fillCircle(17, 19, 9);
+      g.fillStyle(0x556677); g.fillCircle(17, 19, 6);
+      g.fillStyle(0xaabbcc); g.fillCircle(17, 19, 2);
+      // ハンドル
+      g.fillStyle(0x889999); g.fillRect(28, 14, 6, 10); g.fillRect(30, 12, 4, 4); g.fillRect(30, 24, 4, 4);
+      // 鍵穴
+      g.fillStyle(0x223344); g.fillCircle(32, 19, 3); g.fillRect(31, 19, 2, 5);
+      g.generateTexture("safe", 38, 38); g.destroy();
     }
 
     // ─── フロア・壁・ライト ───────────────────────────────

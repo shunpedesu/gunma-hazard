@@ -1,4 +1,6 @@
 import Phaser from "phaser";
+import { BGMPlayer } from "../objects/BGMPlayer";
+import { setDifficulty, type Difficulty } from "../data/difficulty";
 
 export class TitleScene extends Phaser.Scene {
   constructor() { super({ key: "TitleScene" }); }
@@ -35,17 +37,23 @@ export class TitleScene extends Phaser.Scene {
       fontSize: "14px", color: "#ccaacc", stroke: "#000000", strokeThickness: 3,
     }).setOrigin(0.5);
 
-    // ステージ紹介
-    const stages = ["STAGE 1: 草津温泉の廃旅館", "STAGE 2: 富岡製糸場の廃墟", "STAGE 3: 赤城山の鬼ヶ島"];
-    const colors = ["#ff8888", "#ffcc88", "#88ccff"];
-    stages.forEach((s, i) => {
-      const t = this.add.text(width / 2, height / 2 + 42 + i * 22, s, {
-        fontSize: "13px", color: colors[i], stroke: "#000000", strokeThickness: 2,
-      }).setOrigin(0.5).setAlpha(0);
+    // ステージ紹介（クリック可能）
+    const stageData = [
+      { label: "STAGE 1:  草津温泉の廃旅館", color: "#ff8888", stage: 1 },
+      { label: "STAGE 2:  富岡製糸場の廃墟",  color: "#ffcc88", stage: 2 },
+      { label: "STAGE 3:  赤城山の鬼ヶ島",   color: "#88ccff", stage: 3 },
+    ];
+    stageData.forEach(({ label, color, stage }, i) => {
+      const t = this.add.text(width / 2, height / 2 + 42 + i * 24, label, {
+        fontSize: "13px", color, stroke: "#000000", strokeThickness: 2,
+      }).setOrigin(0.5).setAlpha(0).setInteractive({ useHandCursor: true });
       this.tweens.add({ targets: t, alpha: 1, duration: 500, delay: 400 + i * 200 });
+      t.on("pointerover", () => t.setColor("#ffff00").setText(`► ${label}`));
+      t.on("pointerout",  () => t.setColor(color).setText(label));
+      t.on("pointerdown", () => goTo("GameScene", { stage }));
     });
 
-    const startBtn = this.add.text(width / 2, height / 2 + 128, "[ スタート ]", {
+    const startBtn = this.add.text(width / 2, height / 2 + 130, "[ スタート ]", {
       fontSize: "26px", color: "#ffffff", stroke: "#000000", strokeThickness: 4,
     }).setOrigin(0.5).setInteractive({ useHandCursor: true });
     this.tweens.add({ targets: startBtn, alpha: 0.2, duration: 700, yoyo: true, repeat: -1 });
@@ -54,26 +62,55 @@ export class TitleScene extends Phaser.Scene {
       .setDepth(100).setAlpha(1);
     this.tweens.add({ targets: overlay, alpha: 0, duration: 800, ease: "Power1" });
 
-    const goStart = () => {
+    BGMPlayer.playTitle();
+
+    const goTo = (sceneKey: string, sceneData?: object) => {
       overlay.setDepth(100).setAlpha(0);
       this.tweens.add({
         targets: overlay, alpha: 1, duration: 500, ease: "Power1",
-        onComplete: () => { this.scene.stop(); this.scene.start("StoryScene"); },
+        onComplete: () => { this.scene.stop(); this.scene.start(sceneKey, sceneData); },
       });
     };
 
     startBtn.on("pointerover", () => startBtn.setColor("#ffff00"));
     startBtn.on("pointerout",  () => startBtn.setColor("#ffffff"));
-    startBtn.on("pointerdown", goStart);
+    startBtn.on("pointerdown", () => goTo("StoryScene"));
 
-    this.add.text(width / 2, height - 58, "移動: WASD / 矢印キー　調べる: スペース / Enter", {
-      fontSize: "13px", color: "#888888",
+    // ─── 難易度選択 ──────────────────────────────────────
+    let currentDiff: Difficulty = "normal";
+    const diffData: { key: Difficulty; label: string; color: string; desc: string }[] = [
+      { key: "easy",   label: "かんたん", color: "#88ff88", desc: "3択クイズ" },
+      { key: "normal", label: "ふつう",   color: "#ffee88", desc: "4択クイズ" },
+      { key: "hard",   label: "むずかしい", color: "#ff8888", desc: "10秒制限" },
+    ];
+    const diffBtns: Phaser.GameObjects.Text[] = [];
+    this.add.text(width / 2, height - 84, "難易度：", {
+      fontSize: "12px", color: "#666666",
     }).setOrigin(0.5);
-    this.add.text(width / 2, height - 38, "タンスに隠れて鬼から逃げろ！", {
-      fontSize: "13px", color: "#888866",
+    diffData.forEach(({ key, label, desc }, i) => {
+      const btn = this.add.text(width / 2 - 110 + i * 110, height - 66, `${label}\n${desc}`, {
+        fontSize: "12px", color: key === "normal" ? "#ffffff" : "#888888",
+        stroke: "#000", strokeThickness: 2, align: "center",
+        backgroundColor: key === "normal" ? "#333322" : "transparent",
+        padding: { x: 6, y: 3 },
+      }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+      diffBtns.push(btn);
+      btn.on("pointerdown", () => {
+        currentDiff = key;
+        setDifficulty(key);
+        diffBtns.forEach((b, bi) => {
+          b.setColor(bi === i ? "#ffffff" : "#888888");
+          b.setBackgroundColor(bi === i ? "#333322" : "transparent");
+        });
+      });
+    });
+    setDifficulty("normal");
+
+    this.add.text(width / 2, height - 28, "移動: WASD / 矢印キー　調べる: スペース / Enter　タンスに隠れて鬼から逃げろ！", {
+      fontSize: "11px", color: "#666666",
     }).setOrigin(0.5);
 
-    this.input.keyboard!.once("keydown-SPACE", goStart);
-    this.input.keyboard!.once("keydown-ENTER", goStart);
+    this.input.keyboard!.once("keydown-SPACE", () => goTo("StoryScene"));
+    this.input.keyboard!.once("keydown-ENTER", () => goTo("StoryScene"));
   }
 }

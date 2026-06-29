@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>グンマハザード｜群馬ホラーコメディ・ブラウザゲーム</title>
+<meta name="description" content="群馬を舞台にしたホラーコメディ脱出ゲーム。こんにゃくおばけ・だるまおばけ・かるた怨霊から逃げ、群馬の豆知識クイズで鍵を集めて脱出せよ。完全無料・スマホPC両対応。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="グンマハザード｜群馬ホラーコメディ・ブラウザゲーム">
+<meta property="og:description" content="こんにゃくおばけから逃げ、群馬の知識で謎を解け。怖いけど笑えるホラーコメディ。完全無料・ブラウザで即プレイ。">
+<meta property="og:url" content="https://shunpedesu.github.io/gunma-hazard/lp/">
+<meta property="og:image" content="https://shunpedesu.github.io/gunma-hazard/ogp.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="グンマハザード｜群馬ホラーコメディ・ブラウザゲーム">
+<meta name="twitter:description" content="こんにゃくおばけから逃げ、群馬の知識で謎を解け。怖いけど笑えるホラーコメディ。">
+<meta name="twitter:image" content="https://shunpedesu.github.io/gunma-hazard/ogp.png">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=Shippori+Mincho+B1:wght@600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=DotGothic16&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{background:#06050a;color:#e9e2da;font-family:'Zen Kaku Gothic New',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    ::selection{background:#8b0a0a;color:#fff}
+    @keyframes flick{0%,19%,21%,23%,80%,100%{opacity:1}20%,22%,55%{opacity:.55}}
+    @keyframes flickslow{0%,100%{opacity:.9}45%{opacity:.5}47%{opacity:.92}}
+    @keyframes grainmove{0%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}40%{transform:translate(3%,-2%)}60%{transform:translate(-2%,4%)}80%{transform:translate(4%,-3%)}100%{transform:translate(0,0)}}
+    @keyframes drip{0%{transform:scaleY(.3);opacity:0}30%{opacity:1}100%{transform:scaleY(1);opacity:.85}}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+    @keyframes pulsered{0%,100%{box-shadow:0 0 0 0 rgba(160,12,12,.55),0 14px 40px rgba(0,0,0,.6)}50%{box-shadow:0 0 0 14px rgba(160,12,12,0),0 14px 40px rgba(0,0,0,.6)}}
+    @keyframes scan{0%{background-position:0 0}100%{background-position:0 100vh}}
+    a{color:inherit;text-decoration:none}
+  </style>
+  <script src="image-slot.js"></script>
+</helmet>
+<div style="position:relative;width:100%;min-height:100vh;background:radial-gradient(120% 80% at 50% -10%,#2a0e36 0%,#140716 32%,#06050a 70%)">
+
+  <template id="__bundler_thumbnail" data-bg-color="#06050a">
+    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1200" height="800" fill="#06050a"/>
+      <text x="600" y="430" font-family="serif" font-size="180" font-weight="700" fill="#c8122a" text-anchor="middle" letter-spacing="10">群馬</text>
+      <text x="600" y="540" font-family="monospace" font-size="44" fill="#8a5a92" text-anchor="middle" letter-spacing="14">HAZARD</text>
+    </svg>
+  </template>
+
+  <!-- grain + scanlines overlays -->
+  <div style="position:fixed;inset:-30%;z-index:60;pointer-events:none;opacity:.07;mix-blend-mode:screen;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%222%22/></filter><rect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/></svg>');animation:grainmove 1.4s steps(3) infinite"></div>
+  <div style="position:fixed;inset:0;z-index:61;pointer-events:none;opacity:.16;background:repeating-linear-gradient(180deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.6) 3px,rgba(0,0,0,0) 4px)"></div>
+  <div style="position:fixed;inset:0;z-index:59;pointer-events:none;box-shadow:inset 0 0 220px 70px rgba(0,0,0,.92)"></div>
+
+  <!-- ===== HERO ===== -->
+  <section style="position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 20px 70px">
+    <div style="font-family:'DotGothic16',monospace;color:#b3102a;letter-spacing:.5em;font-size:13px;margin-bottom:26px;text-shadow:0 0 14px rgba(179,16,42,.7);animation:flickslow 5s infinite">⚠ ＧＵＮＭＡ　ＨＯＲＲＯＲ　ＡＣＴＩＯＮ ⚠</div>
+
+    <h1 style="font-family:'Yuji Syuku',serif;font-weight:400;line-height:.92;font-size:clamp(44px,11vw,118px);white-space:nowrap;color:#f3ece4;letter-spacing:.04em;text-shadow:0 0 2px #fff,4px 4px 0 #6a0712,7px 7px 0 rgba(120,6,18,.45),0 0 36px rgba(150,10,20,.55);animation:flick 7s infinite">グンマ<span style="color:#c8122a;text-shadow:0 0 2px #ff5a5a,4px 4px 0 #2a0008,0 0 32px rgba(200,18,42,.8)">ハザード</span></h1>
+
+    <div style="position:relative;margin-top:26px;font-family:'Shippori Mincho B1',serif;font-weight:600;font-size:clamp(14px,3.4vw,21px);letter-spacing:.18em;color:#cbb9c6">〜 草津・富岡・赤城　<span style="color:#e0455c">呪われた群馬３連戦</span> 〜</div>
+
+    <p style="margin-top:30px;max-width:540px;font-size:clamp(13px,3.4vw,15px);line-height:2;color:#9b909c;letter-spacing:.06em">こんにゃくおばけから逃げ、群馬の知識で謎を解け。<br>怖いけど、なぜか笑える——ホラーコメディ。</p>
+
+    <div style="margin-top:46px;display:flex;flex-direction:column;align-items:center;gap:16px">
+      <a href="{{ gameUrl }}" target="_blank" rel="noopener" style="position:relative;display:inline-flex;align-items:center;gap:14px;padding:20px 46px;background:linear-gradient(180deg,#c1102a,#7a0414);color:#fff;font-family:'DotGothic16',monospace;font-size:clamp(16px,4.6vw,22px);letter-spacing:.14em;border:2px solid #ff5a64;border-radius:3px;animation:pulsered 2.6s infinite;transition:transform .15s,filter .15s" style-hover="transform:translateY(-3px) scale(1.03);filter:brightness(1.18)">▶ 今すぐ遊ぶ</a>
+      <span style="font-family:'DotGothic16',monospace;font-size:11px;letter-spacing:.18em;color:#6f6470">― 完全無料 / ブラウザで即プレイ ―</span>
+    </div>
+
+    <div style="position:absolute;bottom:26px;left:50%;transform:translateX(-50%);font-family:'DotGothic16',monospace;font-size:10px;letter-spacing:.4em;color:#5a4f5c;animation:flickslow 3s infinite">▼ ＳＣＲＯＬＬ ▼</div>
+  </section>
+
+  <!-- ===== CONCEPT ===== -->
+  <section style="position:relative;z-index:2;padding:clamp(70px,12vw,120px) 22px;text-align:center;background:linear-gradient(180deg,rgba(42,14,54,0) 0%,rgba(46,12,58,.55) 50%,rgba(42,14,54,0) 100%)">
+    <div style="font-family:'DotGothic16',monospace;color:#8a5a92;letter-spacing:.4em;font-size:12px;margin-bottom:22px">― ＡＢＯＵＴ ―</div>
+    <p style="max-width:720px;margin:0 auto;font-family:'Shippori Mincho B1',serif;font-weight:600;font-size:clamp(20px,5vw,34px);line-height:1.85;letter-spacing:.04em;color:#efe6e0;text-wrap:balance">群馬を舞台にした<br><span style="color:#e0455c">ホラーコメディ脱出ゲーム。</span></p>
+    <p style="max-width:560px;margin:30px auto 0;font-size:clamp(13px,3.6vw,16px);line-height:2.1;color:#a99fac;letter-spacing:.05em">こんにゃくおばけ・だるまおばけ・かるた怨霊から逃げながら、<br>群馬の豆知識クイズで鍵を集め、廃墟から脱出せよ。</p>
+  </section>
+
+  <!-- ===== SCREENSHOTS ===== -->
+  <section style="position:relative;z-index:2;padding:clamp(40px,6vw,60px) 20px clamp(60px,9vw,90px);max-width:1080px;margin:0 auto">
+    <h2 style="text-align:center;font-family:'Yuji Syuku',serif;font-size:clamp(26px,6vw,44px);color:#f0e7df;letter-spacing:.08em;margin-bottom:10px;text-shadow:3px 3px 0 #5a0610">ゲ ー ム 画 面</h2>
+    <p style="text-align:center;font-family:'DotGothic16',monospace;color:#7d7280;font-size:11px;letter-spacing:.32em;margin-bottom:clamp(34px,5vw,46px)">― ＳＣＲＥＥＮＳＨＯＴＳ ―</p>
+    <div style="display:grid;grid-template-columns:1.5fr 1fr;grid-auto-rows:1fr;gap:18px">
+      <figure style="margin:0;grid-row:1 / span 3;display:flex;flex-direction:column">
+        <image-slot id="gh-shot-1" style="width:100%;flex:1;min-height:300px;border:1.5px solid rgba(150,30,50,.45);box-shadow:0 14px 40px rgba(0,0,0,.55)" shape="rounded" radius="6" fit="cover" src="assets/shot-title.jpg" placeholder="プレイ画像をドロップ ①"></image-slot>
+      </figure>
+      <figure style="margin:0">
+        <image-slot id="gh-shot-2" style="width:100%;aspect-ratio:16/10;border:1.5px solid rgba(150,30,50,.34);box-shadow:0 10px 30px rgba(0,0,0,.5)" shape="rounded" radius="6" src="assets/shot-entrance.jpg" placeholder="プレイ画像をドロップ ②"></image-slot>
+      </figure>
+      <figure style="margin:0">
+        <image-slot id="gh-shot-3" style="width:100%;aspect-ratio:16/10;border:1.5px solid rgba(150,30,50,.34);box-shadow:0 10px 30px rgba(0,0,0,.5)" shape="rounded" radius="6" src="assets/shot-key.jpg" placeholder="プレイ画像をドロップ ③"></image-slot>
+      </figure>
+      <figure style="margin:0">
+        <image-slot id="gh-shot-4" style="width:100%;aspect-ratio:16/10;border:1.5px solid rgba(150,30,50,.34);box-shadow:0 10px 30px rgba(0,0,0,.5)" shape="rounded" radius="6" src="assets/shot-quiz.jpg" placeholder="プレイ画像をドロップ ④"></image-slot>
+      </figure>
+    </div>
+    <p style="text-align:center;margin-top:18px;font-size:11px;color:#5a4f5c;letter-spacing:.06em">※ 枠にゲームのスクリーンショットをドラッグ＆ドロップで設定できます</p>
+  </section>
+
+  <!-- ===== STAGES ===== -->
+  <section style="position:relative;z-index:2;padding:clamp(40px,6vw,70px) 20px clamp(70px,10vw,110px);max-width:1120px;margin:0 auto">
+    <h2 style="text-align:center;font-family:'Yuji Syuku',serif;font-size:clamp(30px,7vw,52px);color:#f0e7df;letter-spacing:.08em;margin-bottom:14px;text-shadow:3px 3px 0 #5a0610,0 0 26px rgba(150,10,20,.4)">呪 わ れ た 3 ス テ ー ジ</h2>
+    <p style="text-align:center;font-family:'DotGothic16',monospace;color:#7d7280;font-size:11px;letter-spacing:.32em;margin-bottom:clamp(40px,6vw,58px)">― ＳＴＡＧＥ ＳＥＬＥＣＴ ―</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px">
+      <sc-for list="{{ stages }}" as="s" hint-placeholder-count="3">
+        <div style="position:relative;background:linear-gradient(180deg,#14101c,#0c0810);border:1.5px solid rgba(150,30,50,.34);border-radius:6px;padding:32px 26px 30px;overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s" style-hover="transform:translateY(-8px);border-color:#c8122a;box-shadow:0 18px 50px rgba(120,6,18,.45),0 0 0 1px rgba(200,18,42,.4)">
+          <div style="position:absolute;top:-14px;right:8px;font-family:'Yuji Syuku',serif;font-size:120px;color:rgba(200,18,42,.08);line-height:1;pointer-events:none">{{ s.kanji }}</div>
+          <div style="font-family:'DotGothic16',monospace;font-size:13px;letter-spacing:.3em;color:#c8122a">STAGE {{ s.no }}</div>
+          <h3 style="margin-top:14px;font-family:'Shippori Mincho B1',serif;font-weight:700;font-size:clamp(22px,5vw,27px);color:#f1e8e0;letter-spacing:.04em;line-height:1.4">{{ s.place }}</h3>
+          <div style="margin-top:8px;font-size:13px;color:#8f8492;letter-spacing:.08em">{{ s.sub }}</div>
+          <div style="margin-top:26px;display:flex;align-items:center;gap:12px;padding-top:20px;border-top:1px dashed rgba(150,60,80,.3)">
+            <span style="font-family:'DotGothic16',monospace;font-size:10px;letter-spacing:.22em;color:#7d7280">敵</span>
+            <span style="font-family:'Shippori Mincho B1',serif;font-weight:600;font-size:16px;color:#e0455c;letter-spacing:.06em;text-shadow:0 0 14px rgba(224,69,92,.5)">{{ s.enemy }}</span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ===== FEATURES ===== -->
+  <section style="position:relative;z-index:2;padding:clamp(70px,11vw,110px) 20px;background:linear-gradient(180deg,rgba(46,12,58,0),rgba(40,10,52,.5),rgba(46,12,58,0))">
+    <div style="max-width:980px;margin:0 auto">
+      <h2 style="text-align:center;font-family:'Yuji Syuku',serif;font-size:clamp(28px,6.5vw,48px);color:#f0e7df;letter-spacing:.08em;margin-bottom:10px;text-shadow:3px 3px 0 #5a0610">ゲ ー ム の 特 徴</h2>
+      <p style="text-align:center;font-family:'DotGothic16',monospace;color:#8a5a92;font-size:11px;letter-spacing:.32em;margin-bottom:clamp(44px,7vw,60px)">― ＦＥＡＴＵＲＥＳ ―</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px">
+        <sc-for list="{{ features }}" as="f" hint-placeholder-count="6">
+          <div style="display:flex;align-items:flex-start;gap:16px;background:rgba(12,8,16,.55);border:1px solid rgba(120,40,60,.22);border-radius:5px;padding:22px 22px;transition:border-color .2s,background .2s" style-hover="border-color:rgba(200,18,42,.5);background:rgba(20,10,22,.7)">
+            <div style="flex:none;width:42px;height:42px;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(200,18,42,.5);border-radius:50%;color:#e0455c">{{ f.icon }}</div>
+            <div>
+              <div style="font-family:'Shippori Mincho B1',serif;font-weight:700;font-size:16px;color:#efe6e0;letter-spacing:.04em">{{ f.title }}</div>
+              <div style="margin-top:6px;font-size:12.5px;line-height:1.7;color:#998f9c;letter-spacing:.03em">{{ f.desc }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HOW TO PLAY ===== -->
+  <section style="position:relative;z-index:2;padding:clamp(50px,8vw,80px) 20px clamp(70px,10vw,100px);max-width:920px;margin:0 auto">
+    <h2 style="text-align:center;font-family:'Yuji Syuku',serif;font-size:clamp(28px,6.5vw,48px);color:#f0e7df;letter-spacing:.08em;margin-bottom:10px;text-shadow:3px 3px 0 #5a0610">遊 び 方</h2>
+    <p style="text-align:center;font-family:'DotGothic16',monospace;color:#7d7280;font-size:11px;letter-spacing:.32em;margin-bottom:clamp(44px,7vw,58px)">― ＨＯＷ　ＴＯ　ＰＬＡＹ ―</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px">
+      <sc-for list="{{ steps }}" as="st" hint-placeholder-count="3">
+        <div style="position:relative;text-align:center;padding:34px 20px 28px;background:linear-gradient(180deg,#14101c,#0b070f);border:1px solid rgba(120,40,60,.24);border-radius:6px">
+          <div style="font-family:'DotGothic16',monospace;font-size:40px;color:#c8122a;line-height:1;text-shadow:0 0 18px rgba(200,18,42,.55)">{{ st.no }}</div>
+          <div style="margin-top:18px;font-family:'Shippori Mincho B1',serif;font-weight:700;font-size:17px;color:#efe6e0;letter-spacing:.05em">{{ st.title }}</div>
+          <div style="margin-top:10px;font-size:12.5px;line-height:1.8;color:#998f9c">{{ st.desc }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ===== FINAL CTA ===== -->
+  <section style="position:relative;z-index:2;text-align:center;padding:clamp(90px,15vw,150px) 22px;background:radial-gradient(90% 120% at 50% 50%,rgba(150,10,24,.4),rgba(46,12,58,.2) 45%,transparent 72%)">
+    <div style="font-family:'DotGothic16',monospace;color:#b3102a;letter-spacing:.42em;font-size:12px;margin-bottom:24px;animation:flickslow 4s infinite">⚠ ＷＡＲＮＩＮＧ ⚠</div>
+    <h2 style="font-family:'Yuji Syuku',serif;font-size:clamp(32px,8vw,68px);color:#f3ece4;letter-spacing:.04em;line-height:1.2;text-shadow:0 0 2px #fff,5px 5px 0 #5a0610,0 0 40px rgba(150,10,20,.6)">逃 げ ら れ る か ？</h2>
+    <a href="{{ gameUrl }}" target="_blank" rel="noopener" style="margin-top:46px;position:relative;display:inline-flex;align-items:center;gap:14px;padding:22px 50px;background:linear-gradient(180deg,#c1102a,#7a0414);color:#fff;font-family:'DotGothic16',monospace;font-size:clamp(16px,4.8vw,24px);letter-spacing:.1em;border:2px solid #ff5a64;border-radius:3px;animation:pulsered 2.6s infinite;transition:transform .15s,filter .15s" style-hover="transform:translateY(-3px) scale(1.03);filter:brightness(1.18)">今すぐ群馬から逃げ出す →</a>
+    <div style="margin-top:24px;font-family:'DotGothic16',monospace;font-size:11px;letter-spacing:.16em;color:#6f6470">完全無料 ・ スマホ / ＰＣ 両対応 ・ インストール不要</div>
+  </section>
+
+  <!-- ===== STREAMING WELCOME ===== -->
+  <section style="position:relative;z-index:2;padding:clamp(40px,7vw,64px) 20px;max-width:900px;margin:0 auto">
+    <div style="text-align:center;background:rgba(12,8,16,.5);border:1px solid rgba(120,40,60,.24);border-radius:8px;padding:clamp(34px,6vw,52px) 24px">
+      <h3 style="font-family:'Shippori Mincho B1',serif;font-weight:700;font-size:clamp(18px,4.6vw,24px);color:#e0455c;letter-spacing:.08em;text-shadow:0 0 16px rgba(224,69,92,.4)">実況・配信を歓迎します</h3>
+      <p style="margin-top:18px;font-size:clamp(13px,3.4vw,15px);line-height:2;color:#a99fac;letter-spacing:.05em">本作の実況・配信・動画投稿は自由です。<br>あなたの声で、群馬の夜を語ってください。</p>
+    </div>
+  </section>
+
+  <!-- ===== INFO ===== -->
+  <section style="position:relative;z-index:2;padding:clamp(50px,8vw,72px) 22px;border-top:1px solid rgba(120,40,60,.16)">
+    <div style="max-width:980px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:34px">
+      <div>
+        <div style="font-family:'DotGothic16',monospace;font-size:11px;letter-spacing:.3em;color:#8a5a92">PLAYTIME</div>
+        <div style="margin-top:14px;font-family:'Shippori Mincho B1',serif;font-weight:700;font-size:clamp(18px,4vw,22px);color:#efe6e0;letter-spacing:.04em">3分でも5分でも</div>
+        <div style="margin-top:8px;font-size:12px;color:#7d7280;letter-spacing:.04em">もちろん、もっと遊べます。</div>
+      </div>
+      <div>
+        <div style="font-family:'DotGothic16',monospace;font-size:11px;letter-spacing:.3em;color:#8a5a92">ENVIRONMENT</div>
+        <div style="margin-top:14px;font-family:'Shippori Mincho B1',serif;font-weight:700;font-size:clamp(18px,4vw,22px);color:#efe6e0;letter-spacing:.04em">PC・スマホのブラウザ</div>
+        <div style="margin-top:8px;font-size:12px;color:#7d7280;letter-spacing:.04em">Chrome / Safari / Edge 推奨</div>
+      </div>
+      <div>
+        <div style="font-family:'DotGothic16',monospace;font-size:11px;letter-spacing:.3em;color:#8a5a92">CREDIT</div>
+        <div style="margin-top:14px;font-family:'Shippori Mincho B1',serif;font-weight:700;font-size:clamp(18px,4vw,22px);color:#efe6e0;letter-spacing:.04em">しゅんぺ</div>
+        <div style="margin-top:8px;font-size:12px;color:#7d7280;letter-spacing:.04em">企画・制作</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer style="position:relative;z-index:2;text-align:center;padding:clamp(50px,8vw,72px) 20px 48px;border-top:1px solid rgba(120,40,60,.2)">
+    <div style="font-family:'DotGothic16',monospace;font-size:11px;letter-spacing:.28em;color:#7d7280;margin-bottom:22px">この夜を、誰かに知らせる</div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-bottom:40px">
+      <a href="{{ shareXUrl }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;padding:14px 26px;background:rgba(18,12,22,.8);border:1px solid rgba(150,60,80,.34);border-radius:4px;color:#e9e2da;font-size:14px;letter-spacing:.06em;transition:border-color .2s,background .2s" style-hover="border-color:#c8122a;background:rgba(28,12,18,.9)"><span style="font-weight:900;font-size:15px">𝕏</span> Xでシェア</a>
+      <a href="{{ noteUrl }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;padding:14px 26px;background:rgba(18,12,22,.8);border:1px solid rgba(150,60,80,.34);border-radius:4px;color:#e9e2da;font-size:14px;letter-spacing:.06em;transition:border-color .2s,background .2s" style-hover="border-color:#c8122a;background:rgba(28,12,18,.9)"><span style="font-family:'DotGothic16',monospace;font-size:13px;letter-spacing:.04em">note</span> 開発ノート</a>
+      <a href="{{ gameUrl }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;padding:14px 26px;background:linear-gradient(180deg,#c1102a,#7a0414);border:1px solid #ff5a64;border-radius:4px;color:#fff;font-size:14px;letter-spacing:.06em;transition:filter .2s" style-hover="filter:brightness(1.15)">▶ プレイページへ</a>
+    </div>
+    <div style="font-family:'Yuji Syuku',serif;font-size:20px;color:#8a7d88;letter-spacing:.1em">グンマハザード</div>
+    <div style="margin-top:10px;font-size:11px;color:#5a4f5c;letter-spacing:.08em">ホラーコメディ・ブラウザゲーム　/　© GUNMA HAZARD</div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:900},&quot;gameUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://shunpedesu.github.io/gunma-hazard/&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;shareXUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;noteUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://note.com/shunpedesu&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const ic = (paths) => React.createElement(
+      "svg",
+      { width: 22, height: 22, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.6, strokeLinecap: "round", strokeLinejoin: "round" },
+      paths.map((d, i) => React.createElement(d[0], { key: i, ...d[1] }))
+    );
+    return {
+      gameUrl: this.props.gameUrl ?? "https://shunpedesu.github.io/gunma-hazard/",
+      shareXUrl: this.props.shareXUrl || ("https://twitter.com/intent/tweet?text=" + encodeURIComponent("怖いけど笑える…群馬ホラーコメディ「グンマハザード」を遊んでみて！ #グンマハザード") + "&url=" + encodeURIComponent(this.props.gameUrl ?? "https://shunpedesu.github.io/gunma-hazard/") + "&via=shunpedesu"),
+      noteUrl: this.props.noteUrl || "https://note.com/shunpedesu",
+      stages: [
+        { no: "1", kanji: "草", place: "草津温泉の廃旅館", sub: "湯けむり立ちこめる無人の宿", enemy: "こんにゃくおばけ" },
+        { no: "2", kanji: "繭", place: "富岡製糸場の廃墟", sub: "糸を紡ぐ音が今も響く", enemy: "だるまおばけ" },
+        { no: "3", kanji: "鬼", place: "赤城山の鬼ヶ島", sub: "山頂に棲まう怨念の地", enemy: "かるた怨霊" },
+      ],
+      features: [
+        { icon: ic([["path",{d:"M12 2v20M5 7h9a3 3 0 010 6H7"}]]), title: "完全無料・即プレイ", desc: "ブラウザを開くだけ。インストール一切不要。" },
+        { icon: ic([["rect",{x:2,y:4,width:14,height:11,rx:1}],["rect",{x:17,y:9,width:5,height:11,rx:1}],["path",{d:"M2 18h11"}]]), title: "スマホ・PC両対応", desc: "片手でも、画面の前でも。どこでも逃げ回れる。" },
+        { icon: ic([["path",{d:"M9.1 9a3 3 0 015.8 1c0 2-3 3-3 3"}],["path",{d:"M12 17h.01"}],["circle",{cx:12,cy:12,r:10}]]), title: "群馬クイズで謎解き", desc: "群馬の豆知識を解いて、脱出の鍵を集めろ。" },
+        { icon: ic([["path",{d:"M3 9v8a2 2 0 002 2h14a2 2 0 002-2V9"}],["path",{d:"M3 9l3-5h12l3 5z"}],["path",{d:"M12 4v15"}]]), title: "タンスに隠れるステルス", desc: "息を潜め、おばけが過ぎ去るのをやり過ごせ。" },
+        { icon: ic([["path",{d:"M4 18l4-8 4 5 4-9 4 12"}],["path",{d:"M3 21h18"}]]), title: "難易度3段階", desc: "かんたん〜むずかしい。腕に覚えがあるなら。" },
+        { icon: ic([["circle",{cx:12,cy:13,r:8}],["path",{d:"M12 9v4l2.5 1.5M9 2h6"}]]), title: "ステージ別タイムアタック", desc: "最速脱出を目指して、何度でも挑戦。" },
+      ],
+      steps: [
+        { no: "01", title: "URLを開く", desc: "リンクをタップ／クリックするだけ。" },
+        { no: "02", title: "ステージを選ぶ", desc: "3つの廃墟から選んで「スタート」。" },
+        { no: "03", title: "逃げて・隠れて・解く", desc: "クイズで鍵を集め、脱出を目指せ。" },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

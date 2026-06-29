@@ -48,7 +48,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     if (this.player.isHiding) {
       this.isChasing = false;
-      this.setVelocity(0, 0);
+      this.patrol(delta); // 隠れている間もパトロールを継続（やり過ごせる）
       if (dist < 80) this.scene.cameras.main.shake(200, 0.005);
       return;
     }

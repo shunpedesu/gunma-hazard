@@ -4,10 +4,20 @@ import { STAGE_CONFIGS } from "../data/gunma-data";
 export class ClearScene extends Phaser.Scene {
   constructor() { super({ key: "ClearScene" }); }
 
-  create(data?: { deathCount?: number; stage?: number }) {
+  create(data?: { deathCount?: number; stage?: number; elapsedMs?: number }) {
     const { width, height } = this.scale;
     const deathCount = data?.deathCount ?? 0;
     const stage = data?.stage ?? 1;
+    const elapsedMs = data?.elapsedMs ?? 0;
+    const bestKey = `gunma_best_stage${stage}`;
+    const prevBest = parseInt(localStorage.getItem(bestKey) ?? "0", 10);
+    const isNewBest = elapsedMs > 0 && (prevBest === 0 || elapsedMs < prevBest);
+    if (isNewBest) localStorage.setItem(bestKey, String(elapsedMs));
+    const fmtTime = (ms: number) => {
+      const m = Math.floor(ms / 60000).toString().padStart(2, "0");
+      const s = Math.floor((ms % 60000) / 1000).toString().padStart(2, "0");
+      return `${m}:${s}`;
+    };
     const isFinalStage = stage >= 3;
     const cfg = STAGE_CONFIGS[stage - 1];
 
@@ -68,11 +78,23 @@ export class ClearScene extends Phaser.Scene {
       this.tweens.add({ targets: finalMsg, alpha: 1, duration: 600, delay: 1800 });
     }
 
+    // E2: クリアタイム
+    if (elapsedMs > 0) {
+      const timeStr = isNewBest
+        ? `⏱ クリアタイム: ${fmtTime(elapsedMs)}  🏅 ベスト更新！`
+        : `⏱ クリアタイム: ${fmtTime(elapsedMs)}  (ベスト: ${fmtTime(prevBest)})`;
+      const timeObj = this.add.text(width / 2, height - 126, timeStr, {
+        fontSize: "14px", color: isNewBest ? "#ffd700" : "#88ffcc",
+        stroke: "#000000", strokeThickness: 3,
+      }).setOrigin(0.5).setAlpha(0).setDepth(5);
+      this.tweens.add({ targets: timeObj, alpha: 1, duration: 600, delay: 2600 });
+    }
+
     // 死亡評価
-    const evalStr = deathCount === 0 ? "🏆 死亡0回！完璧な冒険！" :
-                    deathCount <= 3  ? `💪 ${deathCount}回捕まって見事クリア！` :
+    const evalStr = deathCount === 0 ? "🏆 一度もやられず！完璧な冒険！" :
+                    deathCount <= 3  ? `💪 ${deathCount}回やられて見事クリア！` :
                     deathCount <= 8  ? `😅 ${deathCount}回も…でもクリア！` :
-                                       `💀 ${deathCount}回死んでようやく…`;
+                                       `💀 ${deathCount}回やられてようやく…`;
     const evalObj = this.add.text(width / 2, height - 100, evalStr, {
       fontSize: "15px", color: "#ffee88",
       stroke: "#000000", strokeThickness: 3,
